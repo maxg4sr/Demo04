@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <!-- import CSS -->
+    <link rel="stylesheet" href="css/eui.css">
+    <style>
+        body {
+            margin: 0;
+            background-image: url("img/reg/bg5.jpg");
+            background-size: cover;/*cover是設置全螢幕背景的*/
+            text-align: center;
+        }
+        h1 {
+            font-size: 72px;
+            color: white;/*rgb(0,150,215)*/
+            margin-bottom: 0;
+        }
+        img {
+            width: 100px;
+        }
+        h2 {
+            font-size: 32px;
+            color: white/*#0095d7*/;
+            margin: 0;
+        }
+        .form-item-label label{
+            font-size: 20px;
+            color: black;
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+    <h1>歡迎來到註冊頁面</h1>
+    <h2>現在註冊即享優惠價格</h2>
+    <el-card style="width: 600px;height: 300px;margin: 0 auto;background-color: rgba(255,255,255,0.3)">
+        <el-form style="width: 400px;margin: 30px auto" label-width="60px">
+            <el-form-item class="form-item-label" label="名字:" >
+                <el-input type="text" v-model="user.name" placeholder="請輸入您的真實姓名">請輸入您的真實姓名</el-input>
+            </el-form-item>
+            <el-form-item class="form-item-label" label="電話:">
+                <el-input type="phone" v-model="user.phone" placeholder="請輸入手機電話號碼">請輸入手機電話號碼</el-input>
+            </el-form-item>
+            <el-form-item class="form-item-label" label="日期:">
+                <el-input type="date" v-model="user.date" placeholder="請輸入申請日期">請輸入申請日期</el-input>
+            </el-form-item>
+            <el-form-item>
+                <el-button style="position: relative;right: 35px" type="primary" @click="reg()">註冊</el-button>
+            </el-form-item>
+        </el-form>
+    </el-card>
+</div>
+</body>
+<!-- import Vue before Element -->
+<script src="js/vue.js"></script>
+<!-- import JavaScript -->
+<script src="js/eui.js"></script>
+<script src="js/axios.min.js"></script>
+<script>
+    let v = new Vue({
+        el: '#app',
+        data: function() {
+            return {
+                user:{
+                    name:"",
+                    phone:"",
+                    date:""
+                }
+            }
+        },
+        methods:{
+            reg() {
+                axios.post("/reg",v.user).then(function (response) {
+                    if (response.data == 1) {
+                        location.href="/index.html";
+                    }else if (response.data == 2) {
+                        v.$message.error("名字已存在!");
+                    }else if (response.data ==3) {
+                        v.$message.error("電話號碼已重複!");
+                    }else {
+                        v.$message.error("日期已經申請過!");
+                    }
+                })
+            }
+        }
+    })
+</script>
+</html>
